@@ -209,9 +209,9 @@ class EpicFreeGamesNoticePlugin(Star):
         """
         推送epic到所有目标群组
         """
+        result = await self._get_epic_free_games()
         for target in self.config.groups:
             try:
-                result = await self._get_epic_free_games()
                 message_chain = MessageChain().message(result)
                 logger.info(f"[epic] 推送Epic免费游戏: {result[:50]}...")
                 await self.context.send_message(target, message_chain)
