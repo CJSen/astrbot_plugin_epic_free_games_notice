@@ -1,8 +1,8 @@
-# astrbot_plugin_epic_notic
+# astrbot_plugin_epic_free_games_notice
 
 ## 项目简介
 
-`astrbot_plugin_epic_notic` 是一个为 [AstrBot](https://github.com/AstrBotDevs/AstrBot) 设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。
+`astrbot_plugin_epic_free_games_notice` 是一个为 [AstrBot](https://github.com/AstrBotDevs/AstrBot) 设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。
 
 特别感谢 [Soulter/astrbot_plugin_essential](https://github.com/Soulter/astrbot_plugin_essential) 仓库提供的获取 Epic 游戏数据的核心代码实现！
 
