@@ -10,9 +10,9 @@ from astrbot.core.message.message_event_result import MessageChain
 
 
 @register(
-    "epic_free_games_notice",
+    "astrbot_plugin_epic_free_games_notice",
     "CJSen",
-    "这是 AstrBot 的一个提醒用户领取 Epic 免费游戏的插件。",
+    "一个为AstrBot设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。理论上支持所有客户端。",
     "0.0.1",
 )
 class EpicFreeGamesNoticePlugin(Star):
