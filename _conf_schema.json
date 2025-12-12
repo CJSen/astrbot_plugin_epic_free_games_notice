@@ -1,0 +1,32 @@
+{
+  "groups": {
+    "description": "需要推送 Epic 免费游戏提醒的群组唯一标识符列表",
+    "type": "list",
+    "hint": "填写需要接收 Epic 免费游戏提醒推送的群组唯一标识符，如: wechatpadpro:GroupMessage:575xxxx1665@chatroom",
+    "obvious_hint": true,
+    "default": ["wechatpadpro:GroupMessage:你的群号@chatroom"]
+  },
+  "push_time": {
+    "description": "推送时间(以服务器时区为准)",
+    "type": "string",
+    "hint": "填写推送的时间，如: 08:00,18:00",
+    "default": "10:00"
+  },
+  "push_way": {
+    "description": "推送方式",
+    "type": "string",
+    "hint": "选择推送方式：每周一/二/三/四/五/六/日、每天、每周五六日.拜托兄弟，三天都没领也没必要领了。",
+    "options": [
+      "每周一",
+      "每周二",
+      "每周三",
+      "每周四",
+      "每周五",
+      "每周六",
+      "每周日",
+      "每天",
+      "每周五六日"
+    ],
+    "default": "每周五六日"
+  }
+}
