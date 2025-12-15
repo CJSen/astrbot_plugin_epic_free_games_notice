@@ -13,7 +13,7 @@ from astrbot.core.message.message_event_result import MessageChain
     "astrbot_plugin_epic_free_games_notice",
     "CJSen",
     "一个为AstrBot设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。理论上支持所有客户端。",
-    "0.0.2",
+    "0.0.3",
 )
 class EpicFreeGamesNoticePlugin(Star):
     """
@@ -100,6 +100,12 @@ class EpicFreeGamesNoticePlugin(Star):
                 # 如果已经过了今天的推送时间，则推迟到明天
                 if next_push <= now:
                     next_push += datetime.timedelta(days=1)
+                    # 检查推迟后的日期是否仍是推送日（周五六日），如果不是，则推迟到下周五
+                    if next_push.weekday() not in [4, 5, 6]:
+                        days_to_friday = (4 - next_push.weekday()) % 7
+                        if days_to_friday == 0:
+                            days_to_friday = 7
+                        next_push += datetime.timedelta(days=days_to_friday)
                 return (next_push - now).total_seconds()
             else:
                 # 如果今天不是周五、周六或周日，则找到下一个最近的周五
@@ -116,17 +122,27 @@ class EpicFreeGamesNoticePlugin(Star):
             target_weekday = weekdays_map[push_way]
             today_weekday = now.weekday()
 
-            # 计算距离目标日期的天数
+            # 如果今天就是目标日
+            if target_weekday == today_weekday:
+                next_push = now.replace(
+                    hour=hour, minute=minute, second=0, microsecond=0
+                )
+                # 如果还没到推送时间，就在今天推送
+                if next_push > now:
+                    return (next_push - now).total_seconds()
+                # 如果已经过了推送时间，则推迟到下周同一天
+                else:
+                    next_push += datetime.timedelta(days=7)
+                    return (next_push - now).total_seconds()
+
+            # 如果今天不是目标日，计算到目标日的天数
             days_ahead = target_weekday - today_weekday
-            if days_ahead <= 0:  # 如果目标日期已经过去或者是今天但已过推送时间
+            if days_ahead < 0:  # 目标日已经过去（上周）
                 days_ahead += 7  # 下一周
 
             next_push = now.replace(
                 hour=hour, minute=minute, second=0, microsecond=0
             ) + datetime.timedelta(days_ahead)
-            # 如果计算出的时间已经过了，则再加一周
-            if next_push <= now:
-                next_push += datetime.timedelta(days=7)
 
             return (next_push - now).total_seconds()
 
