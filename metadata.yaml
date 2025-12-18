@@ -1,6 +1,6 @@
 name: astrbot_plugin_epic_free_games_notice # 这是你的插件的唯一识别名。
 display_name: Epic免费游戏提醒
 desc: 一个为AstrBot设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。理论上支持所有客户端。 # 插件简短描述
-version: v0.0.3 # 插件版本号。格式：v1.1.1 或者 v1.1
+version: v0.0.4 # 插件版本号。格式：v1.1.1 或者 v1.1
 author: CJSen # 作者
 repo: https://github.com/CJSen/astrbot_plugin_epic_free_games_notice # 插件的仓库地址

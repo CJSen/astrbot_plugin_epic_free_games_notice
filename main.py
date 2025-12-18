@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import traceback
+from urllib.parse import quote
 
 import aiohttp
 from astrbot.api import AstrBotConfig, logger
@@ -13,7 +14,7 @@ from astrbot.core.message.message_event_result import MessageChain
     "astrbot_plugin_epic_free_games_notice",
     "CJSen",
     "一个为AstrBot设计的 Epic 喜加一游戏提醒插件。该插件可自动或手动推送本周的 Epic 免费游戏信息到指定群组，帮助群成员及时领取免费游戏。理论上支持所有客户端。",
-    "0.0.3",
+    "v0.0.4",
 )
 class EpicFreeGamesNoticePlugin(Star):
     """
@@ -154,7 +155,7 @@ class EpicFreeGamesNoticePlugin(Star):
 
     async def _get_epic_free_games(self) -> str:
         """获取 Epic 免费游戏信息"""
-        url = "https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions"
+        url = "https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=zh-CN&country=CN&allowCountries=CN"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
@@ -167,6 +168,10 @@ class EpicFreeGamesNoticePlugin(Star):
 
         for game in data["data"]["Catalog"]["searchStore"]["elements"]:
             title = game.get("title", "未知")
+            description = game.get("description", "暂无")
+
+            title_encoded = quote(title, safe="")
+            direct_link = f"EPIC: https://store.epicgames.com/zh-CN/browse?q={title_encoded}&sortBy=currentPrice&sortDir=ASC&count=40"
             try:
                 if not game.get("promotions"):
                     continue
@@ -201,19 +206,21 @@ class EpicFreeGamesNoticePlugin(Star):
 
                 if promotions:
                     games.append(
-                        f"【{title}】\n原价: {original_price} | 现价: {discount_price}\n活动时间: {start_human} - {end_human}"
+                        # f"【{title}】\n简介: {description}\n直达链接: {direct_link}\n原价: {original_price} | 现价: {discount_price}\n活动时间: {start_human} - {end_human}"
+                        f"【{title}】\n简介: {description}\n原价: {original_price} | 现价: {discount_price}\n活动时间: {start_human} - {end_human}"
                     )
                 else:
                     upcoming.append(
-                        f"【{title}】\n原价: {original_price} | 现价: {discount_price}\n活动时间: {start_human} - {end_human}"
+                        f"【{title}】\n简介: {description}\n原价: {original_price} | 现价: {discount_price}\n活动时间: {start_human} - {end_human}"
                     )
 
             except Exception as e:
                 logger.error(f"处理游戏 {title} 时出错: {e}")
                 continue
-
         result = (
             "【EPIC 喜加一】\n"
+            # + f"EPIC: https://store.epicgames.com/zh-CN/browse?q={title_encoded}&sortBy=currentPrice&sortDir=ASC&count=40"
+            # + "\n"
             + "EPIC: https://store.epicgames.com/zh-CN/  \n"
             + "\n\n".join(games)
             + ("\n\n【即将免费】\n" + "\n\n".join(upcoming) if upcoming else "")
